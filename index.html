@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8f4" />
+    <title>Savor — Good Food Rescued | Mobile UX/UI Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Global Demo / State Switcher Bar -->
+    <header class="demo-bar" aria-label="Interactive UX Prototype State Switcher">
+      <div class="demo-branding">
+        <span class="brand-dot"></span>
+        <strong>SAVOR UX/UI Prototype</strong>
+        <span class="demo-badge">Task 11 Showcase</span>
+      </div>
+      <div class="demo-nav">
+        <span class="demo-label">Jump to Flow:</span>
+        <button class="demo-btn active" data-go="welcome">1. Welcome</button>
+        <button class="demo-btn" data-go="auth">2. Auth</button>
+        <button class="demo-btn" data-go="home">3. Home</button>
+        <button class="demo-btn" data-go="details">4. Details</button>
+        <button class="demo-btn" data-go="reserve">5. Reserve</button>
+        <button class="demo-btn" data-go="success">6. Success</button>
+      </div>
+      <div class="demo-states">
+        <span class="demo-label">Key UX States:</span>
+        <button class="demo-btn state-btn" data-go="loading">Loading</button>
+        <button class="demo-btn state-btn" data-go="empty">Empty</button>
+        <button class="demo-btn state-btn" data-go="error">Error</button>
+        <button class="demo-btn state-btn" data-go="soldout">Sold Out</button>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <main class="device-shell" aria-label="Savor mobile application preview">
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span class="status-time" id="live-time">9:41</span>
+          <div class="status-icons">
+            <span title="Signal">▮▮▮</span>
+            <span title="Wi-Fi">⌁</span>
+            <span class="battery" title="Battery">▰</span>
+          </div>
+        </div>
+
+        <section class="app-view">
+          <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+          <!-- 1. WELCOME / ONBOARDING SCREEN -->
+          <section id="screen-welcome" class="screen active">
+            <div class="welcome-art">
+              <div class="sun"></div>
+              <div class="leaf leaf-one"></div>
+              <div class="leaf leaf-two"></div>
+              <div class="leaf leaf-three"></div>
+              <div class="plate">
+                <span>🥐</span>
+                <span>🍓</span>
+                <span>🥖</span>
+              </div>
+              <div class="spark spark-one">✦</div>
+              <div class="spark spark-two">✧</div>
+            </div>
+            <div class="welcome-copy">
+              <div class="brand-mark"><span class="brand-dot"></span>SAVOR</div>
+              <h1>Good food<br /><em>shouldn't go</em> to waste.</h1>
+              <p>Rescue delicious surplus meals & pastry boxes from top local spots at up to 70% off.</p>
+              <button class="button primary full" data-go="auth">Get started <span>→</span></button>
+              <button class="text-button" data-go="auth">I already have an account</button>
+            </div>
+          </section>
+
+          <!-- 2. AUTHENTICATION SCREEN -->
+          <section id="screen-auth" class="screen">
+            <header class="simple-header">
+              <button class="icon-button" data-go="welcome" aria-label="Back">←</button>
+              <span class="brand-mark small"><span class="brand-dot"></span>SAVOR</span>
+              <span class="header-spacer"></span>
+            </header>
+            <div class="auth-content">
+              <div class="eyebrow">WELCOME IN</div>
+              <h2>Let's find your<br /><em>first rescue.</em></h2>
+              <p class="muted">Join a community saving good food and supporting local neighborhood spots.</p>
+
+              <form id="auth-form" onsubmit="return false;">
+                <div class="form-stack">
+                  <div class="input-group">
+                    <label for="email">Email address</label>
+                    <input id="email" type="email" placeholder="you@example.com" value="alex@example.com" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-input">
+                      <input id="password" type="password" placeholder="At least 8 characters" value="password123" required />
+                      <button type="button" id="toggle-password" aria-label="Toggle password visibility">👁</button>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="button primary full" id="auth-submit-btn" data-go="home">Continue <span>→</span></button>
+              </form>
+
+              <div class="divider"><span>or continue with</span></div>
+              <button class="social-button" id="google-auth-btn"><span class="google">G</span> Google Sign-In</button>
+              <p class="terms">By continuing, you agree to Savor's <u>Terms of Service</u> and <u>Privacy Policy</u>.</p>
+            </div>
+          </section>
+
+          <!-- 3. HOME / EXPLORE SCREEN -->
+          <section id="screen-home" class="screen">
+            <header class="home-header">
+              <div>
+                <div class="greeting">TUESDAY, OCTOBER 7</div>
+                <h2>Good morning, Alex <span>✦</span></h2>
+              </div>
+              <button class="avatar" title="Account profile">A</button>
+            </header>
+
+            <div class="location-pill" id="location-picker">
+              <span>⌖</span> Brooklyn, NY <span class="chevron">⌄</span>
+            </div>
+
+            <div class="home-scroll">
+              <!-- Impact Metrics Card -->
+              <div class="impact-card">
+                <div>
+                  <span class="impact-label">YOUR IMPACT</span>
+                  <strong>4.8 lbs</strong>
+                  <p>of delicious food rescued · 2.1kg CO₂ saved</p>
+                </div>
+                <div class="impact-icon">♻</div>
+                <div class="progress-line" title="Progress toward monthly goal"><span style="width: 65%;"></span></div>
+              </div>
+
+              <!-- Search Bar -->
+              <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="search-input" aria-label="Search rescue boxes" placeholder="Search bakery, sushi, coffee, produce..." />
+              </div>
+
+              <!-- Categories -->
+              <div class="section-heading">
+                <h3>Rescues near you</h3>
+                <button class="link-button" data-go="empty">See all (12)</button>
+              </div>
+
+              <div class="category-row" id="category-row">
+                <button class="category active" data-cat="all">All</button>
+                <button class="category" data-cat="bakery">Bakery</button>
+                <button class="category" data-cat="produce">Produce</button>
+                <button class="category" data-cat="meals">Prepared Meals</button>
+                <button class="category" data-cat="cafe">Café & Coffee</button>
+              </div>
+
+              <!-- Rescue Cards List -->
+              <div id="rescue-list">
+                <!-- Card 1: Available -->
+                <article class="rescue-card" data-go="details">
+                  <div class="food-image bakery-image">
+                    <span class="image-tag">ENDS SOON</span>
+                    <button class="heart-btn" aria-label="Save to favorites">♡</button>
+                    <div class="food-emoji">🥐</div>
+                  </div>
+                  <div class="card-info">
+                    <div class="merchant-line">
+                      <span>Le Petit Grain</span>
+                      <span class="distance">0.3 mi</span>
+                    </div>
+                    <h3>Morning bakery surprise box</h3>
+                    <p>Artisanal croissants, sourdough & danishes</p>
+                    <div class="card-bottom">
+                      <strong>$5.00 <del>$18.00</del></strong>
+                      <span class="time urgent">● Pickup 10:00–10:30 AM</span>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 2: Available -->
+                <article class="rescue-card" data-go="details">
+                  <div class="food-image produce-image">
+                    <button class="heart-btn" aria-label="Save to favorites">♡</button>
+                    <div class="food-emoji">🥬</div>
+                  </div>
+                  <div class="card-info">
+                    <div class="merchant-line">
+                      <span>Greenhouse Market</span>
+                      <span class="distance">0.7 mi</span>
+                    </div>
+                    <h3>Seasonal organic produce box</h3>
+                    <p>Fresh organic fruits, herbs and leafy greens</p>
+                    <div class="card-bottom">
+                      <strong>$7.00 <del>$24.00</del></strong>
+                      <span class="time">● Pickup 5:00–7:00 PM</span>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Card 3: Sold Out Trigger -->
+                <article class="rescue-card sold-out-card" data-go="soldout">
+                  <div class="food-image cafe-image">
+                    <span class="image-tag tag-soldout">SOLD OUT</span>
+                    <button class="heart-btn" aria-label="Save to favorites">♡</button>
+                    <div class="food-emoji">☕</div>
+                  </div>
+                  <div class="card-info">
+                    <div class="merchant-line">
+                      <span>Brooklyn Craft Roast</span>
+                      <span class="distance">0.5 mi</span>
+                    </div>
+                    <h3>Daily Espresso & Bagel Bag</h3>
+                    <p>Freshly baked bagels & specialty coffee treats</p>
+                    <div class="card-bottom">
+                      <strong class="text-muted">$4.50 <del>$15.00</del></strong>
+                      <span class="time disabled-text">● All boxes claimed</span>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <!-- How Savor Works Section -->
+              <div class="section-heading inspiration">
+                <h3>How Savor works</h3>
+              </div>
+              <div class="how-card">
+                <span class="how-num">01</span>
+                <div>
+                  <strong>Find surplus food</strong>
+                  <p>Browse top local spots offering discounted surplus boxes.</p>
+                </div>
+                <span>→</span>
+              </div>
+            </div>
+
+            <!-- Tab Navigation Bar -->
+            <nav class="tab-bar">
+              <button class="tab selected" data-tab="home"><span>⌂</span>Home</button>
+              <button class="tab" data-tab="explore" data-go="empty"><span>⌕</span>Explore</button>
+              <button class="tab" data-tab="saved" data-go="empty"><span>♡</span>Saved</button>
+              <button class="tab" data-tab="profile" data-go="auth"><span>♙</span>Profile</button>
+            </nav>
+          </section>
+
+          <!-- 4. PRODUCT DETAILS SCREEN -->
+          <section id="screen-details" class="screen">
+            <header class="detail-header">
+              <button class="round-button" data-go="home" aria-label="Back">←</button>
+              <div class="detail-actions">
+                <button class="round-button heart-toggle-detail" aria-label="Favorite">♡</button>
+                <button class="round-button share-detail" aria-label="Share">⤴</button>
+              </div>
+            </header>
+            <div class="detail-scroll">
+              <div class="detail-image bakery-image">
+                <span class="image-tag">3 BOXES LEFT</span>
+                <div class="detail-food">🥐</div>
+                <div class="image-dots"><i class="active"></i><i></i><i></i></div>
+              </div>
+              <div class="detail-content">
+                <div class="merchant-line">
+                  <span>LE PETIT GRAIN · 0.3 MI AWAY</span>
+                  <span class="verified" title="Verified Partner">✓</span>
+                </div>
+                <h1>Morning bakery surprise box</h1>
+                <p class="detail-description">
+                  A delicious assortment of today's freshly baked artisanal pastries, croissants, brioches, and sourdough loaves that deserve to be enjoyed. Help reduce waste while savoring gourmet bakery items.
+                </p>
+
+                <div class="detail-facts">
+                  <div>
+                    <span>📦</span>
+                    <strong>4–6 items</strong>
+                    <small>Estimated contents</small>
+                  </div>
+                  <div>
+                    <span>⏰</span>
+                    <strong>10:00–10:30 AM</strong>
+                    <small>Pickup window today</small>
+                  </div>
+                  <div>
+                    <span>🌱</span>
+                    <strong>Vegetarian</strong>
+                    <small>Dietary info</small>
+                  </div>
+                </div>
+
+                <div class="seller">
+                  <div class="seller-logo">LP</div>
+                  <div>
+                    <strong>Le Petit Grain Bakery</strong>
+                    <p>4.9 ★★★★★ (128 rescues)</p>
+                  </div>
+                  <button class="link-button" id="view-shop-btn">View shop</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-cta">
+              <div>
+                <span class="price">$5.00</span>
+                <del>$18.00</del>
+                <small>Taxes included</small>
+              </div>
+              <button class="button primary" data-go="reserve">Reserve box <span>→</span></button>
+            </div>
+          </section>
+
+          <!-- 5. ACTION / FORM (RESERVATION & CHECKOUT) SCREEN -->
+          <section id="screen-reserve" class="screen">
+            <header class="simple-header">
+              <button class="icon-button" data-go="details" aria-label="Back">←</button>
+              <strong>Reserve your rescue</strong>
+              <span class="header-spacer"></span>
+            </header>
+
+            <div class="reserve-scroll">
+              <div class="stepper">
+                <span class="done" title="Step 1: Item Selected">✓</span>
+                <i></i>
+                <span class="current" title="Step 2: Pickup & Payment Details">2</span>
+                <i></i>
+                <span>3</span>
+              </div>
+
+              <div class="reservation-summary">
+                <div class="mini-food bakery-image">🥐</div>
+                <div>
+                  <strong>Morning bakery surprise box</strong>
+                  <p>Le Petit Grain · Today</p>
+                </div>
+                <div class="summary-price">$5.00</div>
+              </div>
+
+              <div class="form-section">
+                <div class="section-heading">
+                  <h3>Reservation details</h3>
+                  <span class="required">ALL FIELDS REQUIRED</span>
+                </div>
+
+                <label for="pickup-name">Pickup Person Name
+                  <input type="text" id="pickup-name" value="Alex Morgan" required />
+                </label>
+
+                <div class="input-group">
+                  <span class="label-text" id="quantity-select-label">Quantity</span>
+                  <div class="quantity-control" aria-labelledby="quantity-select-label">
+                    <button type="button" class="qty-btn" id="qty-minus" aria-label="Decrease quantity">-</button>
+                    <span id="qty-value">1 box</span>
+                    <button type="button" class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <span class="label-text">Pickup Time Window</span>
+                  <div class="select-input" id="time-window-select">
+                    <span>Today, 10:00 AM – 10:30 AM</span>
+                    <span class="chevron">⌄</span>
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <span class="label-text">Payment Method</span>
+                  <div class="select-input" id="payment-method-select">
+                    <span><span class="card-brand">VISA</span> •••• 4242</span>
+                    <span class="chevron">Change ⌄</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Price Breakdown -->
+              <div class="price-breakdown">
+                <div class="breakdown-row"><span>Item subtotal (1x box)</span><span>$5.00</span></div>
+                <div class="breakdown-row"><span>Service fee (Food rescue support)</span><span>$0.50</span></div>
+                <div class="breakdown-row total-row"><span>Total charge</span><span id="checkout-total">$5.50</span></div>
+              </div>
+
+              <div class="notice"><span>💡</span>
+                <p>Please bring your own reusable bag if possible. Show your digital order ticket upon pickup.</p>
+              </div>
+            </div>
+
+            <div class="bottom-cta">
+              <div>
+                <span class="price" id="checkout-total-cta">$5.50</span>
+                <small>Charged upon confirmation</small>
+              </div>
+              <button class="button primary" id="confirm-reservation-btn" data-go="success">Confirm reservation</button>
+            </div>
+          </section>
+
+          <!-- 6. CONFIRMATION / SUCCESS SCREEN -->
+          <section id="screen-success" class="screen">
+            <div class="success-content">
+              <div class="success-mark">✓</div>
+              <div class="eyebrow">RESERVATION CONFIRMED</div>
+              <h1>Your rescue is<br /><em>waiting for you.</em></h1>
+              <p class="muted">We've saved your Morning bakery box at Le Petit Grain!</p>
+
+              <!-- Digital Ticket Component -->
+              <div class="ticket">
+                <div class="ticket-top">
+                  <div>
+                    <span>PICKUP WINDOW TODAY</span>
+                    <strong>10:00 AM – 10:30 AM</strong>
+                  </div>
+                  <div class="ticket-code">
+                    SVR
+                    <b>#2841</b>
+                  </div>
+                </div>
+                <div class="ticket-divider"></div>
+                <div class="ticket-bottom">
+                  <div class="seller-logo">LP</div>
+                  <div>
+                    <strong>Le Petit Grain Bakery</strong>
+                    <p>182 Atlantic Ave, Brooklyn NY</p>
+                  </div>
+                  <span class="map-pin">⌖</span>
+                </div>
+                <!-- Simulated Barcode -->
+                <div class="ticket-barcode">
+                  <div class="barcode-lines">||||| | |||| ||| |||| | ||||| |||</div>
+                  <small>Present this screen to staff at pickup</small>
+                </div>
+              </div>
+
+              <div class="success-actions">
+                <button class="button primary full" data-go="home">Back to Home <span>→</span></button>
+                <button class="outline-button full" id="add-cal-btn">Add to Calendar 📅</button>
+              </div>
+              <p class="success-foot">Confirmation receipt emailed to <strong>alex@example.com</strong></p>
+            </div>
+          </section>
+
+          <!-- 7. STATE: EMPTY STATE -->
+          <section id="screen-empty" class="screen state-screen">
+            <button class="icon-button back-state" data-go="home" aria-label="Back">←</button>
+            <div class="state-illustration">⌕</div>
+            <h2>No rescues here <em>yet.</em></h2>
+            <p class="muted">All surplus boxes in this category have been claimed for today. Check back soon or try expanding your search distance.</p>
+            <button class="button primary" data-go="home">Back to Home</button>
+          </section>
+
+          <!-- 8. STATE: ERROR STATE -->
+          <section id="screen-error" class="screen state-screen">
+            <button class="icon-button back-state" data-go="home" aria-label="Back">←</button>
+            <div class="state-illustration error">!</div>
+            <h2>Something went<br /><em>off course.</em></h2>
+            <p class="muted">We couldn't load nearby rescues due to a connection drop. Please check your internet connection.</p>
+            <button class="button primary" id="retry-error-btn" data-state="loading">Retry connection</button>
+          </section>
+
+          <!-- 9. STATE: LOADING STATE -->
+          <section id="screen-loading" class="screen state-screen">
+            <div class="spinner"></div>
+            <h2>Finding good food<br /><em>near you...</em></h2>
+            <p class="muted">Locating nearby partners and available surplus boxes.</p>
+          </section>
+
+          <!-- 10. STATE: SOLD OUT / DISABLED STATE -->
+          <section id="screen-soldout" class="screen">
+            <header class="detail-header">
+              <button class="round-button" data-go="home" aria-label="Back">←</button>
+              <div class="detail-actions">
+                <button class="round-button">♡</button>
+              </div>
+            </header>
+            <div class="detail-scroll">
+              <div class="detail-image cafe-image">
+                <span class="image-tag tag-soldout">SOLD OUT FOR TODAY</span>
+                <div class="detail-food">☕</div>
+              </div>
+              <div class="detail-content">
+                <div class="merchant-line">
+                  <span>BROOKLYN CRAFT ROAST · 0.5 MI AWAY</span>
+                  <span class="verified">✓</span>
+                </div>
+                <h1>Daily Espresso & Bagel Bag</h1>
+                <p class="detail-description">
+                  Freshly baked artisanal bagels & espresso roast treats. All surplus boxes for today have been claimed by fellow food rescuers.
+                </p>
+
+                <div class="disabled-banner">
+                  <span>⏰</span>
+                  <div>
+                    <strong>Sold Out for Today</strong>
+                    <p>New surplus boxes from this store drop daily at 8:00 AM.</p>
+                  </div>
+                </div>
+
+                <div class="seller">
+                  <div class="seller-logo">BC</div>
+                  <div>
+                    <strong>Brooklyn Craft Roast</strong>
+                    <p>4.8 ★★★★★ (94 rescues)</p>
+                  </div>
+                  <button class="link-button">Notify me when available</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-cta disabled-cta">
+              <div>
+                <span class="price text-muted">$4.50</span>
+                <small>Currently unavailable</small>
+              </div>
+              <button class="button primary full disabled-btn" disabled>Sold Out for Today</button>
+            </div>
+          </section>
+
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
