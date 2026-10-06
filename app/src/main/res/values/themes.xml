@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Savor" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#24312C</item>
+        <item name="android:navigationBarColor">#24312C</item>
+        <item name="android:windowBackground">#F7F8F4</item>
+    </style>
+</resources>
