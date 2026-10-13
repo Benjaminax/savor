@@ -1,8 +1,8 @@
 const screens = ["welcome", "auth", "home", "details", "reserve", "success", "empty", "error", "loading", "soldout", "explore", "saved", "profile", "shop"];
 const products = {
-  bakery: { name: "Morning bakery surprise box", merchant: "Le Petit Grain Bakery", shortMerchant: "Le Petit Grain", price: 5, retail: 18, stock: 3, category: "bakery", emoji: "🥐", image: "bakery-image", pickup: "182 Atlantic Ave, Brooklyn NY", description: "A delicious assortment of today's freshly baked pastries, croissants, brioches and sourdough loaves. Help reduce waste while enjoying neighbourhood bakery favourites." },
-  produce: { name: "Seasonal organic produce box", merchant: "Green Basket Co-op", shortMerchant: "Green Basket", price: 7, retail: 24, stock: 5, category: "produce", emoji: "🥬", image: "produce-image", pickup: "48 Court St, Brooklyn NY", description: "A seasonal mix of organic fruit, herbs and leafy greens from a local co-op. Contents vary with the day's harvest, and every box helps reduce food waste." },
-  cafe: { name: "Daily Espresso & Bagel Bag", merchant: "Brooklyn Craft Roast", shortMerchant: "Brooklyn Craft Roast", price: 4.5, retail: 15, stock: 0, category: "cafe", emoji: "☕", image: "cafe-image", pickup: "12 Smith St, Brooklyn NY", description: "Fresh bagels and specialty coffee treats from a neighbourhood café. Today's surplus boxes have all been claimed." }
+  bakery: { name: "Morning bakery surprise box", merchant: "Le Petit Grain Bakery", shortMerchant: "Le Petit Grain", price: 5, retail: 18, stock: 3, category: "bakery", emoji: "🥐", image: "bakery-image", pickup: "182 Atlantic Ave, Brooklyn NY", distance: "0.3", contents: "4–6 items", window: "10:00–10:30 AM", diet: "Vegetarian", description: "A delicious assortment of today's freshly baked pastries, croissants, brioches and sourdough loaves. Help reduce waste while enjoying neighbourhood bakery favourites." },
+  produce: { name: "Seasonal organic produce box", merchant: "Green Basket Co-op", shortMerchant: "Green Basket", price: 7, retail: 24, stock: 5, category: "produce", emoji: "🥬", image: "produce-image", pickup: "48 Court St, Brooklyn NY", distance: "0.7", contents: "Seasonal produce", window: "5:00–7:00 PM", diet: "Plant-based", description: "A seasonal mix of organic fruit, herbs and leafy greens from a local co-op. Contents vary with the day's harvest, and every box helps reduce food waste." },
+  cafe: { name: "Daily Espresso & Bagel Bag", merchant: "Brooklyn Craft Roast", shortMerchant: "Brooklyn Craft Roast", price: 4.5, retail: 15, stock: 0, category: "cafe", emoji: "☕", image: "cafe-image", pickup: "12 Smith St, Brooklyn NY", distance: "0.5", contents: "2–4 items", window: "4:00–4:30 PM", diet: "Vegetarian options", description: "Fresh bagels and specialty coffee treats from a neighbourhood café. Today's surplus boxes have all been claimed." }
 };
 const serviceFeePerBox = 0.5;
 const pickupSlots = ["Today, 10:00 AM–10:30 AM", "Today, 4:00 PM–4:30 PM", "Today, 6:00 PM–6:30 PM"];
@@ -174,7 +174,7 @@ function cardMarkup(id) {
       <button class="heart-btn ${favorites.includes(id) ? "liked" : ""}" type="button" data-favorite="${id}" aria-label="Save ${product.name} to favorites" aria-pressed="${favorites.includes(id)}">${favorites.includes(id) ? "♥" : "♡"}</button>
       <div class="food-emoji">${product.emoji}</div>
     </div>
-    <div class="card-info"><div class="merchant-line"><span>${product.merchant}</span><span class="distance">${id === "bakery" ? "0.3" : id === "produce" ? "0.7" : "0.5"} mi</span></div>
+    <div class="card-info"><div class="merchant-line"><span>${product.merchant}</span><span class="distance">${product.distance} mi</span></div>
       <h3>${product.name}</h3><p>${id === "bakery" ? "Freshly baked pastries and sourdough" : id === "produce" ? "Organic fruit, herbs and leafy greens" : "Fresh bagels and specialty coffee treats"}</p>
       <div class="card-bottom"><strong>${money(product.price)} <del>${money(product.retail)}</del></strong><span class="time ${soldOut ? "disabled-text" : ""}">${soldOut ? "● All boxes claimed" : "● Pickup today"}</span></div>
     </div>
@@ -192,6 +192,10 @@ function renderDetails() {
   const merchantLine = document.querySelector("#screen-details .merchant-line > span:first-child");
   merchantLine.textContent = `${item.merchant.toUpperCase()} · 0.3 MI AWAY`;
   document.querySelector("#screen-details .detail-description").textContent = item.description;
+  const facts = document.querySelectorAll("#screen-details .detail-facts div");
+  facts[0].querySelector("strong").textContent = item.contents;
+  facts[1].querySelector("strong").textContent = item.window;
+  facts[2].querySelector("strong").textContent = item.diet;
   document.querySelector("#screen-details .seller-logo").textContent = item.merchant.slice(0, 2).toUpperCase();
   document.querySelector("#screen-details .seller strong").textContent = item.merchant;
   const detailFavorite = document.querySelector("#screen-details .heart-toggle-detail");
