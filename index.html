@@ -69,9 +69,9 @@
             <div class="welcome-copy">
               <div class="brand-mark"><span class="brand-dot"></span>SAVOR</div>
               <h1>Good food<br /><em>shouldn't go</em> to waste.</h1>
-              <p>Rescue delicious surplus meals & pastry boxes from top local spots at up to 70% off.</p>
+              <p>For local food lovers: find affordable surplus from nearby shops and reserve a box before it goes to waste.</p>
               <button class="button primary full" data-go="auth">Get started <span>→</span></button>
-              <button class="text-button" data-go="auth">I already have an account</button>
+              <button class="text-button" id="existing-account-btn" data-go="auth">I already have an account</button>
             </div>
           </section>
 
@@ -87,37 +87,42 @@
               <h2>Let's find your<br /><em>first rescue.</em></h2>
               <p class="muted">Join a community saving good food and supporting local neighborhood spots.</p>
 
-              <form id="auth-form" onsubmit="return false;">
+              <form id="auth-form" novalidate>
+                <div class="input-group signup-name" hidden>
+                  <label for="auth-name">Name</label>
+                  <input id="auth-name" type="text" autocomplete="name" placeholder="Your name" />
+                </div>
                 <div class="form-stack">
                   <div class="input-group">
                     <label for="email">Email address</label>
-                    <input id="email" type="email" placeholder="you@example.com" value="alex@example.com" required />
+                    <input id="email" type="email" autocomplete="email" placeholder="you@example.com" aria-describedby="email-error" required />
+                    <small class="field-error" id="email-error" aria-live="polite"></small>
                   </div>
                   <div class="input-group">
                     <label for="password">Password</label>
                     <div class="password-input">
-                      <input id="password" type="password" placeholder="At least 8 characters" value="password123" required />
+                      <input id="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" aria-describedby="password-error" required />
                       <button type="button" id="toggle-password" aria-label="Toggle password visibility">👁</button>
                     </div>
+                    <small class="field-error" id="password-error" aria-live="polite"></small>
                   </div>
                 </div>
-                <button type="submit" class="button primary full" id="auth-submit-btn" data-go="home">Continue <span>→</span></button>
+                <button type="submit" class="button primary full" id="auth-submit-btn">Continue <span>→</span></button>
+                <p class="auth-toggle-copy"><span id="auth-toggle-prompt">New to Savor?</span> <button type="button" class="text-button inline-button" id="auth-mode-toggle">Create an account</button></p>
               </form>
-
-              <div class="divider"><span>or continue with</span></div>
-              <button class="social-button" id="google-auth-btn"><span class="google">G</span> Google Sign-In</button>
-              <p class="terms">By continuing, you agree to Savor's <u>Terms of Service</u> and <u>Privacy Policy</u>.</p>
+              <p class="terms">By continuing, you agree to Savor's <button type="button" class="terms-link" data-modal="terms">Terms of Service</button> and <button type="button" class="terms-link" data-modal="privacy">Privacy Policy</button>.</p>
             </div>
           </section>
 
           <!-- 3. HOME / EXPLORE SCREEN -->
           <section id="screen-home" class="screen">
             <header class="home-header">
+              <button class="icon-button home-back" data-go="welcome" aria-label="Back to welcome">←</button>
               <div>
-                <div class="greeting">TUESDAY, OCTOBER 7</div>
-                <h2>Good morning, Alex <span>✦</span></h2>
+                <div class="greeting" id="today-label"></div>
+                <h2>Good morning, <span id="greeting-name">there</span> <span>✦</span></h2>
               </div>
-              <button class="avatar" title="Account profile">A</button>
+              <button class="avatar" title="Open profile" aria-label="Open profile" data-go="profile">S</button>
             </header>
 
             <div class="location-pill" id="location-picker">
@@ -145,24 +150,32 @@
               <!-- Categories -->
               <div class="section-heading">
                 <h3>Rescues near you</h3>
-                <button class="link-button" data-go="empty">See all (12)</button>
+                <button class="link-button" data-go="explore">See all</button>
               </div>
 
-              <div class="category-row" id="category-row">
-                <button class="category active" data-cat="all">All</button>
+              <div class="category-row" id="category-row" aria-label="Filter rescues by category">
+                <button class="category active" data-cat="all" aria-pressed="true">All</button>
                 <button class="category" data-cat="bakery">Bakery</button>
                 <button class="category" data-cat="produce">Produce</button>
                 <button class="category" data-cat="meals">Prepared Meals</button>
                 <button class="category" data-cat="cafe">Café & Coffee</button>
               </div>
 
+              <div class="loading-skeleton" id="home-skeleton" aria-label="Loading nearby rescues" hidden>
+                <div class="skeleton-card"></div><div class="skeleton-card"></div>
+              </div>
+              <div class="context-empty" id="search-empty" hidden>
+                <strong>No matches nearby</strong>
+                <p class="muted">Try a different search or browse all rescue boxes.</p>
+                <button type="button" class="button primary" id="clear-search">Clear search</button>
+              </div>
               <!-- Rescue Cards List -->
-              <div id="rescue-list">
+              <div id="rescue-list" aria-live="polite">
                 <!-- Card 1: Available -->
-                <article class="rescue-card" data-go="details">
+                <article class="rescue-card" data-go="details" data-item="bakery" data-category="bakery">
                   <div class="food-image bakery-image">
                     <span class="image-tag">ENDS SOON</span>
-                    <button class="heart-btn" aria-label="Save to favorites">♡</button>
+                    <button class="heart-btn" type="button" data-favorite="bakery" aria-label="Save Morning bakery surprise box to favorites">♡</button>
                     <div class="food-emoji">🥐</div>
                   </div>
                   <div class="card-info">
@@ -180,14 +193,15 @@
                 </article>
 
                 <!-- Card 2: Available -->
-                <article class="rescue-card" data-go="details">
+                <article class="rescue-card" data-go="details" data-item="produce" data-category="produce">
                   <div class="food-image produce-image">
-                    <button class="heart-btn" aria-label="Save to favorites">♡</button>
+                    <span class="image-tag">5 BOXES LEFT</span>
+                    <button class="heart-btn" type="button" data-favorite="produce" aria-label="Save Seasonal organic produce box to favorites">♡</button>
                     <div class="food-emoji">🥬</div>
                   </div>
                   <div class="card-info">
                     <div class="merchant-line">
-                      <span>Greenhouse Market</span>
+                      <span>Green Basket Co-op</span>
                       <span class="distance">0.7 mi</span>
                     </div>
                     <h3>Seasonal organic produce box</h3>
@@ -200,10 +214,10 @@
                 </article>
 
                 <!-- Card 3: Sold Out Trigger -->
-                <article class="rescue-card sold-out-card" data-go="soldout">
+                <article class="rescue-card sold-out-card" data-go="soldout" data-item="cafe" data-category="cafe">
                   <div class="food-image cafe-image">
                     <span class="image-tag tag-soldout">SOLD OUT</span>
-                    <button class="heart-btn" aria-label="Save to favorites">♡</button>
+                    <button class="heart-btn" type="button" data-favorite="cafe" aria-label="Save Daily Espresso & Bagel Bag to favorites">♡</button>
                     <div class="food-emoji">☕</div>
                   </div>
                   <div class="card-info">
@@ -237,10 +251,10 @@
 
             <!-- Tab Navigation Bar -->
             <nav class="tab-bar">
-              <button class="tab selected" data-tab="home"><span>⌂</span>Home</button>
-              <button class="tab" data-tab="explore" data-go="empty"><span>⌕</span>Explore</button>
-              <button class="tab" data-tab="saved" data-go="empty"><span>♡</span>Saved</button>
-              <button class="tab" data-tab="profile" data-go="auth"><span>♙</span>Profile</button>
+              <button class="tab selected" data-tab="home" data-go="home"><span aria-hidden="true">⌂</span>Home</button>
+              <button class="tab" data-tab="explore" data-go="explore"><span aria-hidden="true">⌕</span>Explore</button>
+              <button class="tab" data-tab="saved" data-go="saved"><span aria-hidden="true">♡</span>Saved</button>
+              <button class="tab" data-tab="profile" data-go="profile"><span aria-hidden="true">♙</span>Profile</button>
             </nav>
           </section>
 
@@ -249,13 +263,13 @@
             <header class="detail-header">
               <button class="round-button" data-go="home" aria-label="Back">←</button>
               <div class="detail-actions">
-                <button class="round-button heart-toggle-detail" aria-label="Favorite">♡</button>
+                <button class="round-button heart-toggle-detail" data-favorite="bakery" aria-label="Save this rescue to favorites">♡</button>
                 <button class="round-button share-detail" aria-label="Share">⤴</button>
               </div>
             </header>
             <div class="detail-scroll">
               <div class="detail-image bakery-image">
-                <span class="image-tag">3 BOXES LEFT</span>
+                <span class="image-tag"><span id="remaining-stock">3</span> BOXES LEFT</span>
                 <div class="detail-food">🥐</div>
                 <div class="image-dots"><i class="active"></i><i></i><i></i></div>
               </div>
@@ -264,7 +278,7 @@
                   <span>LE PETIT GRAIN · 0.3 MI AWAY</span>
                   <span class="verified" title="Verified Partner">✓</span>
                 </div>
-                <h1>Morning bakery surprise box</h1>
+                <h1 id="detail-name">Morning bakery surprise box</h1>
                 <p class="detail-description">
                   A delicious assortment of today's freshly baked artisanal pastries, croissants, brioches, and sourdough loaves that deserve to be enjoyed. Help reduce waste while savoring gourmet bakery items.
                 </p>
@@ -293,7 +307,7 @@
                     <strong>Le Petit Grain Bakery</strong>
                     <p>4.9 ★★★★★ (128 rescues)</p>
                   </div>
-                  <button class="link-button" id="view-shop-btn">View shop</button>
+                  <button class="link-button" id="view-shop-btn" type="button">View shop</button>
                 </div>
               </div>
             </div>
@@ -304,7 +318,7 @@
                 <del>$18.00</del>
                 <small>Taxes included</small>
               </div>
-              <button class="button primary" data-go="reserve">Reserve box <span>→</span></button>
+              <button class="button primary" id="reserve-from-details" data-go="reserve">Reserve box <span>→</span></button>
             </div>
           </section>
 
@@ -326,12 +340,13 @@
               </div>
 
               <div class="reservation-summary">
-                <div class="mini-food bakery-image">🥐</div>
+              <div class="mini-food bakery-image" id="reserve-emoji">🥐</div>
                 <div>
-                  <strong>Morning bakery surprise box</strong>
-                  <p>Le Petit Grain · Today</p>
+                <strong id="reserve-item-name">Morning bakery surprise box</strong>
+                <p id="reserve-merchant">Le Petit Grain · Today</p>
+                <p id="reserve-selection-summary" class="selection-summary">Select pickup time and payment below.</p>
                 </div>
-                <div class="summary-price">$5.00</div>
+              <div class="summary-price" id="reserve-unit-price">$5.00</div>
               </div>
 
               <div class="form-section">
@@ -341,7 +356,7 @@
                 </div>
 
                 <label for="pickup-name">Pickup Person Name
-                  <input type="text" id="pickup-name" value="Alex Morgan" required />
+                  <input type="text" id="pickup-name" autocomplete="name" placeholder="Name for pickup" required />
                 </label>
 
                 <div class="input-group">
@@ -353,26 +368,26 @@
                   </div>
                 </div>
 
-                <div class="input-group">
-                  <span class="label-text">Pickup Time Window</span>
-                  <div class="select-input" id="time-window-select">
-                    <span>Today, 10:00 AM – 10:30 AM</span>
-                    <span class="chevron">⌄</span>
-                  </div>
-                </div>
+                <fieldset class="input-group choice-group" id="pickup-slots">
+                  <legend class="label-text">Pickup time window</legend>
+                  <label><input type="radio" name="pickup-time" value="Today, 10:00 AM–10:30 AM" checked /> Today, 10:00–10:30 AM</label>
+                  <label><input type="radio" name="pickup-time" value="Today, 4:00 PM–4:30 PM" /> Today, 4:00–4:30 PM</label>
+                  <label><input type="radio" name="pickup-time" value="Today, 6:00 PM–6:30 PM" /> Today, 6:00–6:30 PM</label>
+                  <button type="button" class="link-button clear-time" id="clear-pickup-time">Clear selection</button>
+                  <small class="field-error" id="pickup-time-error" aria-live="polite"></small>
+                </fieldset>
 
-                <div class="input-group">
-                  <span class="label-text">Payment Method</span>
-                  <div class="select-input" id="payment-method-select">
-                    <span><span class="card-brand">VISA</span> •••• 4242</span>
-                    <span class="chevron">Change ⌄</span>
-                  </div>
-                </div>
+                <fieldset class="input-group choice-group" id="payment-options">
+                  <legend class="label-text">Payment method</legend>
+                  <label><input type="radio" name="payment-method" value="Card" checked /> Card</label>
+                  <label><input type="radio" name="payment-method" value="Mobile money" /> Mobile money</label>
+                  <label><input type="radio" name="payment-method" value="Pay at pickup" /> Pay at pickup</label>
+                </fieldset>
               </div>
 
               <!-- Price Breakdown -->
               <div class="price-breakdown">
-                <div class="breakdown-row"><span>Item subtotal (1x box)</span><span>$5.00</span></div>
+                <div class="breakdown-row"><span>Item subtotal (<span id="subtotal-quantity">1</span> × box)</span><span id="checkout-subtotal">$5.00</span></div>
                 <div class="breakdown-row"><span>Service fee (Food rescue support)</span><span>$0.50</span></div>
                 <div class="breakdown-row total-row"><span>Total charge</span><span id="checkout-total">$5.50</span></div>
               </div>
@@ -387,7 +402,7 @@
                 <span class="price" id="checkout-total-cta">$5.50</span>
                 <small>Charged upon confirmation</small>
               </div>
-              <button class="button primary" id="confirm-reservation-btn" data-go="success">Confirm reservation</button>
+              <button class="button primary" id="confirm-reservation-btn">Confirm reservation</button>
             </div>
           </section>
 
@@ -397,33 +412,30 @@
               <div class="success-mark">✓</div>
               <div class="eyebrow">RESERVATION CONFIRMED</div>
               <h1>Your rescue is<br /><em>waiting for you.</em></h1>
-              <p class="muted">We've saved your Morning bakery box at Le Petit Grain!</p>
+              <p class="muted" id="success-message"></p>
 
               <!-- Digital Ticket Component -->
               <div class="ticket">
                 <div class="ticket-top">
                   <div>
                     <span>PICKUP WINDOW TODAY</span>
-                    <strong>10:00 AM – 10:30 AM</strong>
+                    <strong id="success-time"></strong>
                   </div>
-                  <div class="ticket-code">
-                    SVR
-                    <b>#2841</b>
-                  </div>
+                  <div class="ticket-code"><span id="success-quantity">1</span><b>BOXES</b></div>
                 </div>
                 <div class="ticket-divider"></div>
                 <div class="ticket-bottom">
                   <div class="seller-logo">LP</div>
                   <div>
-                    <strong>Le Petit Grain Bakery</strong>
-                    <p>182 Atlantic Ave, Brooklyn NY</p>
+                    <strong id="success-merchant">Le Petit Grain Bakery</strong>
+                    <p id="success-payment"></p>
                   </div>
                   <span class="map-pin">⌖</span>
                 </div>
                 <!-- Simulated Barcode -->
                 <div class="ticket-barcode">
                   <div class="barcode-lines">||||| | |||| ||| |||| | ||||| |||</div>
-                  <small>Present this screen to staff at pickup</small>
+                  <small>Present this screen to staff · Total <strong id="success-total"></strong></small>
                 </div>
               </div>
 
@@ -431,30 +443,31 @@
                 <button class="button primary full" data-go="home">Back to Home <span>→</span></button>
                 <button class="outline-button full" id="add-cal-btn">Add to Calendar 📅</button>
               </div>
-              <p class="success-foot">Confirmation receipt emailed to <strong>alex@example.com</strong></p>
+              <p class="success-foot" id="success-pickup-name"></p>
             </div>
           </section>
 
           <!-- 7. STATE: EMPTY STATE -->
           <section id="screen-empty" class="screen state-screen">
             <button class="icon-button back-state" data-go="home" aria-label="Back">←</button>
-            <div class="state-illustration">⌕</div>
-            <h2>No rescues here <em>yet.</em></h2>
-            <p class="muted">All surplus boxes in this category have been claimed for today. Check back soon or try expanding your search distance.</p>
-            <button class="button primary" data-go="home">Back to Home</button>
+            <div class="state-illustration" id="empty-icon">⌕</div>
+            <h2 id="empty-title">No rescues here <em>yet.</em></h2>
+            <p class="muted" id="empty-message">All surplus boxes in this category have been claimed for today. Check back soon or try expanding your search distance.</p>
+            <button class="button primary" data-go="explore" id="empty-action">Explore rescues</button>
           </section>
 
           <!-- 8. STATE: ERROR STATE -->
           <section id="screen-error" class="screen state-screen">
-            <button class="icon-button back-state" data-go="home" aria-label="Back">←</button>
+            <button class="icon-button back-state" id="error-back" data-go="home" aria-label="Back">←</button>
             <div class="state-illustration error">!</div>
             <h2>Something went<br /><em>off course.</em></h2>
             <p class="muted">We couldn't load nearby rescues due to a connection drop. Please check your internet connection.</p>
-            <button class="button primary" id="retry-error-btn" data-state="loading">Retry connection</button>
+            <button class="button primary" id="retry-error-btn">Retry connection</button>
           </section>
 
           <!-- 9. STATE: LOADING STATE -->
           <section id="screen-loading" class="screen state-screen">
+            <button class="icon-button back-state" id="loading-back" data-go="home" aria-label="Back to previous screen">←</button>
             <div class="spinner"></div>
             <h2>Finding good food<br /><em>near you...</em></h2>
             <p class="muted">Locating nearby partners and available surplus boxes.</p>
@@ -465,7 +478,7 @@
             <header class="detail-header">
               <button class="round-button" data-go="home" aria-label="Back">←</button>
               <div class="detail-actions">
-                <button class="round-button">♡</button>
+                <button class="round-button" data-favorite="cafe" aria-label="Save Daily Espresso & Bagel Bag to favorites">♡</button>
               </div>
             </header>
             <div class="detail-scroll">
@@ -497,7 +510,7 @@
                     <strong>Brooklyn Craft Roast</strong>
                     <p>4.8 ★★★★★ (94 rescues)</p>
                   </div>
-                  <button class="link-button">Notify me when available</button>
+                  <button class="link-button" id="notify-toggle" type="button" aria-pressed="false">Notify me when available</button>
                 </div>
               </div>
             </div>
@@ -510,11 +523,75 @@
               <button class="button primary full disabled-btn" disabled>Sold Out for Today</button>
             </div>
           </section>
+          <section id="screen-explore" class="screen">
+            <header class="simple-header">
+              <button class="icon-button" data-go="home" aria-label="Back to home">←</button><strong>Explore rescues</strong><span class="header-spacer"></span>
+            </header>
+            <div class="home-scroll secondary-scroll">
+              <p class="muted">Browse every nearby surplus box and filter by category.</p>
+              <div class="category-row explore-categories"></div>
+              <div id="explore-list"></div>
+              <div class="context-empty" id="explore-empty" hidden><strong>No boxes in this category yet</strong><p class="muted">Try another category.</p></div>
+            </div>
+            <nav class="tab-bar" aria-label="Main navigation">
+              <button class="tab" data-tab="home" data-go="home"><span aria-hidden="true">⌂</span>Home</button>
+              <button class="tab selected" data-tab="explore" data-go="explore"><span aria-hidden="true">⌕</span>Explore</button>
+              <button class="tab" data-tab="saved" data-go="saved"><span aria-hidden="true">♡</span>Saved</button>
+              <button class="tab" data-tab="profile" data-go="profile"><span aria-hidden="true">♙</span>Profile</button>
+            </nav>
+          </section>
 
+          <section id="screen-saved" class="screen">
+            <header class="simple-header">
+              <button class="icon-button" data-go="home" aria-label="Back to home">←</button><strong>Saved rescues</strong><span class="header-spacer"></span>
+            </header>
+            <div class="home-scroll secondary-scroll">
+              <p class="muted">Your favourite local food finds.</p>
+              <div id="saved-list"></div>
+              <div class="context-empty" id="saved-empty" hidden><div class="state-illustration">♡</div><strong>No saved boxes yet</strong><p class="muted">Tap the heart on any rescue to keep it here.</p><button class="button primary" data-go="explore">Explore rescues</button></div>
+            </div>
+            <nav class="tab-bar" aria-label="Main navigation">
+              <button class="tab" data-tab="home" data-go="home"><span aria-hidden="true">⌂</span>Home</button>
+              <button class="tab" data-tab="explore" data-go="explore"><span aria-hidden="true">⌕</span>Explore</button>
+              <button class="tab selected" data-tab="saved" data-go="saved"><span aria-hidden="true">♡</span>Saved</button>
+              <button class="tab" data-tab="profile" data-go="profile"><span aria-hidden="true">♙</span>Profile</button>
+            </nav>
+          </section>
+
+          <section id="screen-profile" class="screen">
+            <header class="simple-header">
+              <button class="icon-button" data-go="home" aria-label="Back to home">←</button><strong>Your profile</strong><span class="header-spacer"></span>
+            </header>
+            <div class="profile-content">
+              <div class="profile-card"><div class="avatar profile-avatar" id="profile-avatar">S</div><div><strong id="profile-name">Food rescuer</strong><p id="profile-email" class="muted">Local demo account</p></div></div>
+              <h3>Past reservations</h3>
+              <div id="reservation-history"></div>
+              <div class="context-empty" id="reservations-empty" hidden><strong>No reservations yet</strong><p class="muted">Your confirmed food rescues will appear here.</p><button class="button primary" data-go="explore">Find a rescue</button></div>
+              <label class="offline-toggle"><input type="checkbox" id="offline-toggle" /> Simulate offline connection</label>
+              <button class="outline-button full" id="logout-btn">Log out</button>
+            </div>
+            <nav class="tab-bar" aria-label="Main navigation">
+              <button class="tab" data-tab="home" data-go="home"><span aria-hidden="true">⌂</span>Home</button>
+              <button class="tab" data-tab="explore" data-go="explore"><span aria-hidden="true">⌕</span>Explore</button>
+              <button class="tab" data-tab="saved" data-go="saved"><span aria-hidden="true">♡</span>Saved</button>
+              <button class="tab selected" data-tab="profile" data-go="profile"><span aria-hidden="true">♙</span>Profile</button>
+            </nav>
+          </section>
+
+          <section id="screen-shop" class="screen">
+            <header class="simple-header"><button class="icon-button" data-go="details" aria-label="Back to rescue details">←</button><strong>Local shop</strong><span class="header-spacer"></span></header>
+            <div class="shop-content"><div class="seller-logo">LP</div><h1>Le Petit Grain Bakery</h1><p class="muted">Neighbourhood shop · 4.9 ★★★★★</p><p>Fresh local food and daily surplus boxes. Rescue today's extras and help keep good food in the neighbourhood.</p><p><strong>Pickup:</strong> <span class="shop-address">182 Atlantic Ave, Brooklyn NY</span></p><button class="button primary full" data-go="details">Back to rescue</button></div>
+          </section>
+
+          </section>
         </section>
       </main>
     </div>
 
+    <dialog id="info-modal" aria-labelledby="modal-title">
+      <form method="dialog"><button class="icon-button modal-close" aria-label="Close dialog">×</button></form>
+      <h2 id="modal-title"></h2><p id="modal-copy"></p><button class="button primary full" id="modal-dismiss" type="button">Got it</button>
+    </dialog>
     <script src="app.js"></script>
   </body>
 </html>
